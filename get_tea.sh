@@ -1,1 +1,9 @@
-curl http://localhost:8080/teas
+curl localhost:8080/teas/{595514343b80a176a7a3b7b6}?[1-100] &
+ curl localhost:8080/teas/{595514343b80a176a7a3b7b6}?[1-100] &
+ curl localhost:8080/teas/{595514343b80a176a7a3b7b6}?[1-100] &
+ curl localhost:8080/teas/{595514343b80a176a7a3b7b6}?[1-100] &
+ curl localhost:8080/teas/{595514343b80a176a7a3b7b6}?[1-100] &
+ curl localhost:8080/teas/{595514343b80a176a7a3b7b6}?[1-100] &
+ curl localhost:8080/teas/{595514343b80a176a7a3b7b6}?[1-100] &
+ curl localhost:8080/teas/{595514343b80a176a7a3b7b6}?[1-100] &
+ curl localhost:8080/teas/{595514343b80a176a7a3b7b6}?[1-100] &

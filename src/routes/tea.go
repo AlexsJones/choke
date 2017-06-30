@@ -2,6 +2,7 @@ package routes
 
 import (
 	"fmt"
+	"log"
 
 	"gopkg.in/mgo.v2/bson"
 
@@ -39,22 +40,23 @@ func AddTeaRoutes(app *iris.Application, databaseContext database.Interface, q *
 			ctx.JSON(teas)
 		})
 		teaRoutes.Get("/{id:string}", func(ctx context.Context) {
+
 			id := ctx.Params().Get("id")
 			sessionCopy := mongo.Session.Copy()
 			defer sessionCopy.Close()
-			collection := &types.TeaRepo{Coll: sessionCopy.DB("development").C("teas")}
-			resp, err := collection.Find(id)
-			if err != nil {
-				ctx.Write([]byte("{}"))
-				return
-			}
+
+			var tea types.Tea
+			sessionCopy.DB("development").C("teas").FindId(bson.ObjectIdHex(id)).One(&tea)
+
 			ctx.Header("Content-Type", "application/vnd.api+json")
-			ctx.JSON(resp)
+			ctx.JSON(tea.Name)
+
 		})
 		teaRoutes.Post("/create", func(ctx context.Context) {
 
 			request := queue.Request{}
 			request.Action = func() {
+				log.Printf("Writing new request to db....\n")
 				sessionCopy := mongo.Session.Copy()
 				defer sessionCopy.Close()
 				var tea types.Tea
@@ -63,6 +65,7 @@ func AddTeaRoutes(app *iris.Application, databaseContext database.Interface, q *
 				sessionCopy.DB("development").C("teas").UpsertId(id, tea)
 			}
 			go q.PushRequest(request)
+			ctx.Write([]byte("OK"))
 		})
 	}
 }

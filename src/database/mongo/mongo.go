@@ -66,6 +66,7 @@ func (mongo *MongodbConnector) Connect() error {
 func (mongo *MongodbConnector) Disconnect() error {
 	fmt.Println("Disconnecting from mongo")
 
+	mongo.Session.Close()
 	return nil
 }
 
