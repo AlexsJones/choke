@@ -5,9 +5,8 @@ import (
 	"github.com/AlexsJones/choke/src/database/mongo"
 	"github.com/AlexsJones/choke/src/queue"
 	"github.com/AlexsJones/choke/src/routes"
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/view"
+
+	"github.com/kataras/iris/v12"
 )
 
 /************************************/
@@ -28,20 +27,20 @@ func main() {
 
 	app := iris.New()
 
-	app.OnErrorCode(iris.StatusInternalServerError, func(ctx context.Context) {
+	app.OnErrorCode(iris.StatusInternalServerError, func(ctx iris.Context) {
 		errMessage := ctx.Values().GetString("error")
 		if errMessage != "" {
-			ctx.Writef("Internal server nerror: %s", errMessage)
+			ctx.Writef("Internal server error: %s", errMessage)
 			return
 		}
-		ctx.Writef("(Unexpected) internal server error")
+		ctx.WriteString("(Unexpected) internal server error")
 	})
 
-	app.AttachView(view.HTML("./views", ".html").Reload(true))
+	app.RegisterView(iris.HTML("./views", ".html").Reload(true))
 
 	routes.AddRoutes(app, m, q)
 
-	app.Get("/data", func(ctx context.Context) {
+	app.Get("/data", func(ctx iris.Context) {
 
 	})
 
